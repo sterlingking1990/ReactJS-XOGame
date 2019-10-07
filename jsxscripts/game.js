@@ -10,3 +10,23 @@ const gameChart={
     9:[9,6,3,5,1,8,7]
 }
 
+class XOGame extends React.component{
+
+    constructor(props){
+        super(props);
+
+        this.state={
+            player_x:[],
+            player_o:[],
+            isToPlay:'x',
+            winner:'',
+            played:''
+        }
+    }
+
+    render(){
+        
+    }
+
+}
+
