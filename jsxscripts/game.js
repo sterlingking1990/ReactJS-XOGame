@@ -27,22 +27,47 @@ function StatusForWinner(props){
 function ToPlay(props) {
 
     return (
-        <p>Next player is {props.isToPlay}</p>
+        <p>Next player is {props.toPlay}</p>
     )
     
 }
 
-function PlayButton(props){
-    props.forValues.map(each_btn=>{
-        return (
-            <div>
-                <button key={each_btn} value={each_btn} id={each_btn} onClick={this.handleChoiceButton}/>
-            </div>
-        )
-    })
+class PlayButton extends React.Component{
+        constructor(props){
+            super(props);
+            this.handlePlay=this.handlePlay.bind(this);
+        }
+
+        handlePlay(event){
+            this.props.onclick(event.target.value);
+
+        }
+
+        render(){
+            var showmarks=this.props.show;
+            var val=this.props.value;
+            var disable=this.props.disable;
+
+            return (
+                <div class="btn-group">
+                    <button value={val[0]} onClick={this.handlePlay} disabled={disable[0]}>{showmarks[0]}</button>
+                    <button value={val[1]} onClick={this.handlePlay} disabled={disable[1]}>{showmarks[1]}</button>
+                    <button value={val[2]} onClick={this.handlePlay} disabled={disable[2]}>{showmarks[2]}</button>
+                    <button value={val[3]} onClick={this.handlePlay} disabled={disable[3]}>{showmarks[3]}</button>
+                    <button value={val[4]} onClick={this.handlePlay} disabled={disable[4]}>{showmarks[4]}</button>
+                    <button value={val[5]} onClick={this.handlePlay} disabled={disable[5]}>{showmarks[5]}</button>
+                    <button value={val[6]} onClick={this.handlePlay} disabled={disable[6]}>{showmarks[6]}</button>
+                    <button value={val[7]} onClick={this.handlePlay} disabled={disable[7]}>{showmarks[7]}</button>
+                    <button value={val[8]} onClick={this.handlePlay} disabled={disable[8]}>{showmarks[8]}</button>
+                </div>
+            )
+
+
+        }
+        
 }
 
-class XOGame extends React.component{
+class XOGame extends React.Component{
 
     constructor(props){
         super(props);
@@ -53,14 +78,42 @@ class XOGame extends React.component{
             isToPlay:'x',
             winner:'',
             played:'',
-            restart:1
+            restart:1,
+            show:[],
+            disable:[false,false,false,false,false,false,false,false,false]
+            
         }
 
-        this.restartGame=this.restartGame.bind(this);
+        this.handleButton=this.handleButton.bind(this);
     }
 
-    restartGame(){
-        this.setState({restart:1,winner:''});
+    handleButton(value){
+        if(this.state.isToPlay=='x'){
+            var showMarks=[];
+            var disables=[];
+
+            var player_x_marks_in_num=[];
+            var player_o_marks_in_num=[];
+            disables=this.state.disable;
+            showMarks=this.state.show;
+            player_x_marks_in_num=this.state.player_x;
+            showMarks[value]='X';
+            disables[value]=true;
+            player_x_marks_in_num[value]=value;
+
+            this.setState({show:showMarks,player_x:player_x_marks_in_num,isToPlay:'o',disable:disables});
+        }
+        if (this.state.isToPlay == 'o') {
+            var showMarks = [];
+            var disables = [];
+            disables = this.state.disable;
+            showMarks = this.state.show;
+            player_o_marks_in_num = this.state.player_o;
+            showMarks[value] = 'O';
+            disables[value] = true;
+            player_o_marks_in_num[value] = value;
+            this.setState({ show: showMarks, player_o: player_o_marks_in_num, isToPlay: 'x', disable:disables });
+        }
     }
 
     render(){
@@ -72,34 +125,22 @@ class XOGame extends React.component{
         var isToPlay=this.state.isToPlay;
         var winner=this.state.winner;
         var restart=this.state.restart;
-
-        //function for who won
-        var whoWon=played=='x'?checkXStatus(lastPlayed_x,player_x):checkOStatus(lastPlayed_o,player_o);
-        if(whoWon!==''){
-            this.setState({ winner: whoWon, restart: 0 });
-
-        }
+        const numbers=[0,1,2,3,4,5,6,7,8];
+        var show=this.state.show;
+        var disable=this.state.disable;
         
-        let gamestate;
-
-        if (restart == 0) {
-            gamestate = <StatusForWinner winner={winner} />
-
-        }
-        else{
-            gamestate = (<fragment>
-                                    <ToPlay isToPlay={isToPlay} />
-                                    <PlayButton forValues={[1, 2, 3, 4, 5, 6, 7, 8, 9]} />
-                        </fragment>)
-        }
         
         return(
-                <fragment>
-                    {gamestate}
-                </fragment>
+                <div>
+                    <ToPlay toPlay={isToPlay}/>
+                    <PlayButton show={show} value={numbers} onclick={this.handleButton} disable={disable}/>
+                </div>
+            
         )
 
     }
-
 }
+
+var outPut=document.getElementById('app');
+ReactDOM.render(<XOGame/>,outPut);
 
