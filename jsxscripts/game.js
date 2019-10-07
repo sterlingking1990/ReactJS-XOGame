@@ -24,6 +24,24 @@ function StatusForWinner(props){
     }
 }
 
+function ToPlay(props) {
+
+    return (
+        <p>Next player is {props.isToPlay}</p>
+    )
+    
+}
+
+function PlayButton(props){
+    props.forValues.map(each_btn=>{
+        return (
+            <div>
+                <button key={each_btn} value={each_btn} id={each_btn} onClick={this.handleChoiceButton}/>
+            </div>
+        )
+    })
+}
+
 class XOGame extends React.component{
 
     constructor(props){
@@ -57,7 +75,7 @@ class XOGame extends React.component{
 
         //function for who won
         var whoWon=played=='x'?checkXStatus(lastPlayed_x,player_x):checkOStatus(lastPlayed_o,player_o);
-        if(whoWon!==false){
+        if(whoWon!==''){
             this.setState({ winner: whoWon, restart: 0 });
 
         }
