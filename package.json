@@ -1,0 +1,12 @@
+{
+  "name": "ReactJS-XOGame",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/sterlingking1990/ReactJS-XOGame.git",
+  "author": "izundukingsleyemeka@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "babel-preset-env": "1.5.2",
+    "babel-preset-react": "6.24.1"
+  }
+}
