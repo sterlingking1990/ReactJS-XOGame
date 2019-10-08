@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -9,15 +9,15 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var gameChart = {
-    1: [1, 2, 3, 4, 7, 5, 9],
-    2: [2, 5, 8, 1, 3],
-    3: [3, 6, 9, 5, 7, 2, 1],
-    4: [4, 5, 6, 1, 7],
-    5: [5, 2, 8, 1, 9],
-    6: [6, 3, 9, 5, 4],
-    7: [7, 8, 9, 5, 3, 4, 1],
-    8: [8, 5, 2, 7, 9],
-    9: [9, 6, 3, 5, 1, 8, 7]
+    0: [0, 1, 2, 3, 6, 4, 8],
+    1: [1, 4, 7, 0, 2],
+    2: [2, 5, 8, 4, 6, 1, 0],
+    3: [3, 4, 5, 0, 6],
+    4: [4, 1, 7, 0, 8],
+    5: [5, 2, 8, 4, 3],
+    6: [6, 7, 8, 4, 2, 3, 0],
+    7: [7, 4, 1, 6, 8],
+    8: [8, 5, 2, 4, 0, 7, 6]
 };
 
 function StatusForWinner(props) {
@@ -25,18 +25,18 @@ function StatusForWinner(props) {
         return null;
     } else {
         return React.createElement(
-            'div',
+            "div",
             null,
             React.createElement(
-                'p',
+                "p",
                 null,
-                'Winner is ',
+                "Winner is ",
                 props.winner
             ),
             React.createElement(
-                'button',
+                "button",
                 { onClick: this.restartGame },
-                'Restart Game'
+                "Restart Game"
             )
         );
     }
@@ -45,11 +45,54 @@ function StatusForWinner(props) {
 function ToPlay(props) {
 
     return React.createElement(
-        'p',
+        "p",
         null,
-        'Next player is ',
+        "Next player is ",
         props.toPlay
     );
+}
+
+function Winner(props) {
+    return React.createElement(
+        "p",
+        null,
+        "Winner is ",
+        props.win
+    );
+}
+
+function checkXStatus(last_played_x, play_x) {
+
+    var num_marks = gameChart[last_played_x];
+
+    var rank = play_x.map(function (each_num) {
+        return num_marks.includes(each_num);
+    }).filter(function (t) {
+        return t !== null;
+    }).length;
+
+    if (rank >= 3) {
+        return "X";
+    } else {
+        return rank;
+    }
+}
+
+function checkOStatus(last_played_o, play_o) {
+
+    var num_marks = gameChart[last_played_o];
+
+    var rank = play_o.map(function (each_num) {
+        return num_marks.includes(each_num);
+    }).filter(function (t) {
+        return t !== null;
+    }).length;
+
+    if (rank >= 3) {
+        return "O";
+    } else {
+        return rank;
+    }
 }
 
 var PlayButton = function (_React$Component) {
@@ -65,62 +108,62 @@ var PlayButton = function (_React$Component) {
     }
 
     _createClass(PlayButton, [{
-        key: 'handlePlay',
+        key: "handlePlay",
         value: function handlePlay(event) {
             this.props.onclick(event.target.value);
         }
     }, {
-        key: 'render',
+        key: "render",
         value: function render() {
             var showmarks = this.props.show;
             var val = this.props.value;
             var disable = this.props.disable;
 
             return React.createElement(
-                'div',
-                { 'class': 'btn-group' },
+                "div",
+                null,
                 React.createElement(
-                    'button',
+                    "button",
                     { value: val[0], onClick: this.handlePlay, disabled: disable[0] },
                     showmarks[0]
                 ),
                 React.createElement(
-                    'button',
+                    "button",
                     { value: val[1], onClick: this.handlePlay, disabled: disable[1] },
                     showmarks[1]
                 ),
                 React.createElement(
-                    'button',
+                    "button",
                     { value: val[2], onClick: this.handlePlay, disabled: disable[2] },
                     showmarks[2]
                 ),
                 React.createElement(
-                    'button',
+                    "button",
                     { value: val[3], onClick: this.handlePlay, disabled: disable[3] },
                     showmarks[3]
                 ),
                 React.createElement(
-                    'button',
+                    "button",
                     { value: val[4], onClick: this.handlePlay, disabled: disable[4] },
                     showmarks[4]
                 ),
                 React.createElement(
-                    'button',
+                    "button",
                     { value: val[5], onClick: this.handlePlay, disabled: disable[5] },
                     showmarks[5]
                 ),
                 React.createElement(
-                    'button',
+                    "button",
                     { value: val[6], onClick: this.handlePlay, disabled: disable[6] },
                     showmarks[6]
                 ),
                 React.createElement(
-                    'button',
+                    "button",
                     { value: val[7], onClick: this.handlePlay, disabled: disable[7] },
                     showmarks[7]
                 ),
                 React.createElement(
-                    'button',
+                    "button",
                     { value: val[8], onClick: this.handlePlay, disabled: disable[8] },
                     showmarks[8]
                 )
@@ -156,7 +199,7 @@ var XOGame = function (_React$Component2) {
     }
 
     _createClass(XOGame, [{
-        key: 'handleButton',
+        key: "handleButton",
         value: function handleButton(value) {
             if (this.state.isToPlay == 'x') {
                 var showMarks = [];
@@ -171,7 +214,7 @@ var XOGame = function (_React$Component2) {
                 disables[value] = true;
                 player_x_marks_in_num[value] = value;
 
-                this.setState({ show: showMarks, player_x: player_x_marks_in_num, isToPlay: 'o', disable: disables });
+                this.setState({ show: showMarks, player_x: player_x_marks_in_num, isToPlay: 'o', disable: disables, played: 'x' });
             }
             if (this.state.isToPlay == 'o') {
                 var showMarks = [];
@@ -182,11 +225,11 @@ var XOGame = function (_React$Component2) {
                 showMarks[value] = 'O';
                 disables[value] = true;
                 player_o_marks_in_num[value] = value;
-                this.setState({ show: showMarks, player_o: player_o_marks_in_num, isToPlay: 'x', disable: disables });
+                this.setState({ show: showMarks, player_o: player_o_marks_in_num, isToPlay: 'x', disable: disables, played: 'o' });
             }
         }
     }, {
-        key: 'render',
+        key: "render",
         value: function render() {
             var player_x = this.state.player_x;
             var player_o = this.state.player_o;
@@ -200,10 +243,15 @@ var XOGame = function (_React$Component2) {
             var show = this.state.show;
             var disable = this.state.disable;
 
+            var whoWon;
+            whoWon = played == "x" ? checkXStatus(lastPlayed_x, player_x) : checkOStatus(lastPlayed_o, player_o);
+            // this.setState({winner:whoWon});
+
             return React.createElement(
-                'div',
+                "div",
                 null,
                 React.createElement(ToPlay, { toPlay: isToPlay }),
+                React.createElement(Winner, { win: whoWon }),
                 React.createElement(PlayButton, { show: show, value: numbers, onclick: this.handleButton, disable: disable })
             );
         }

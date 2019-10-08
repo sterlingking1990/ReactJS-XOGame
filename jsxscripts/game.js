@@ -1,28 +1,39 @@
-const gameChart={
-    1:[1,2,3,4,7,5,9],
-    2:[2,5,8,1,3],
-    3:[3,6,9,5,7,2,1],
-    4:[4,5,6,1,7],
-    5:[5,2,8,1,9],
-    6:[6,3,9,5,4],
-    7:[7,8,9,5,3,4,1],
-    8:[8,5,2,7,9],
-    9:[9,6,3,5,1,8,7]
+const gameChart = {
+    0: [0, 1, 2, 3, 6, 4, 8],
+    1: [1, 4, 7, 0, 2],
+    2: [2, 5, 8, 4, 6, 1, 0],
+    3: [3, 4, 5, 0, 6],
+    4: [4, 1, 7, 0, 8],
+    5: [5, 2, 8, 4, 3],
+    6: [6, 7, 8, 4, 2, 3, 0],
+    7: [7, 4, 1, 6, 8],
+    8: [8, 5, 2, 4, 0, 7, 6]
 }
 
-function StatusForWinner(props){
-    if(props.winner==''){
-        return null
+class Winner extends React.Component{
+    constructor(props){
+        super(props);
+
+        this.restartGame=this.restartGame.bind(this);
     }
-    else{
-        return (
-            <div>
-                <p>Winner is {props.winner}</p>
-                <button onClick={this.restartGame}>Restart Game</button>
-            </div>
-        )
+
+    restartGame(event){
+        this.props.handleRestart(event.target.value);
     }
-}
+
+        render(){
+            var restart=this.props.restart;
+            var winner=this.props.winner;
+            return(
+                <div>
+
+                    <p>Winner is {winner}</p>
+                    <button value={restart} onClick={this.restartGame}>Restart Game</button>
+                </div>
+            )
+
+        }
+    }
 
 function ToPlay(props) {
 
@@ -30,6 +41,40 @@ function ToPlay(props) {
         <p>Next player is {props.toPlay}</p>
     )
     
+}
+
+
+function checkXStatus(last_played_x,play_x){
+  
+
+    var num_marks=gameChart[last_played_x];
+
+    var rank=play_x.map(each_num=>num_marks.includes(each_num)).filter(t=>t!==null).length;
+
+    if(rank>=3){
+        return "X";
+    }
+    else{
+        return rank;
+    }
+
+
+}
+
+function checkOStatus(last_played_o, play_o) {
+
+    var num_marks = gameChart[last_played_o];
+
+    var rank = play_o.map(each_num => num_marks.includes(each_num)).filter(t => t!==null).length;
+
+    if (rank >= 3) {
+        return "O";
+    }
+    else{
+        return rank;
+    }
+
+
 }
 
 class PlayButton extends React.Component{
@@ -49,7 +94,7 @@ class PlayButton extends React.Component{
             var disable=this.props.disable;
 
             return (
-                <div class="btn-group">
+                <div>
                     <button value={val[0]} onClick={this.handlePlay} disabled={disable[0]}>{showmarks[0]}</button>
                     <button value={val[1]} onClick={this.handlePlay} disabled={disable[1]}>{showmarks[1]}</button>
                     <button value={val[2]} onClick={this.handlePlay} disabled={disable[2]}>{showmarks[2]}</button>
@@ -85,6 +130,11 @@ class XOGame extends React.Component{
         }
 
         this.handleButton=this.handleButton.bind(this);
+        this.handleGameRestart=this.handleGameRestart.bind(this);
+    }
+
+    handleGameRestart(torestart){
+        this.setState({restart:torestart});
     }
 
     handleButton(value){
@@ -101,7 +151,7 @@ class XOGame extends React.Component{
             disables[value]=true;
             player_x_marks_in_num[value]=value;
 
-            this.setState({show:showMarks,player_x:player_x_marks_in_num,isToPlay:'o',disable:disables});
+            this.setState({show:showMarks,player_x:player_x_marks_in_num,isToPlay:'o',disable:disables,played:'x'});
         }
         if (this.state.isToPlay == 'o') {
             var showMarks = [];
@@ -112,7 +162,7 @@ class XOGame extends React.Component{
             showMarks[value] = 'O';
             disables[value] = true;
             player_o_marks_in_num[value] = value;
-            this.setState({ show: showMarks, player_o: player_o_marks_in_num, isToPlay: 'x', disable:disables });
+            this.setState({ show: showMarks, player_o: player_o_marks_in_num, isToPlay: 'x', disable:disables,played:'o' });
         }
     }
 
@@ -128,12 +178,24 @@ class XOGame extends React.Component{
         const numbers=[0,1,2,3,4,5,6,7,8];
         var show=this.state.show;
         var disable=this.state.disable;
-        
+
+        var whoWon;
+        var showBoard;
+        whoWon=played=="x"?checkXStatus(lastPlayed_x,player_x):checkOStatus(lastPlayed_o,player_o);
+        // this.setState({winner:whoWon});
+        if(whoWon=='x' || whoWon=='o'){
+            showBoard = <Winner win={whoWon} restart={restart} handleRestart={this.handleGameRestart} />
+        }
+        else{
+            if(restart==1){
+            showBoard = <div><ToPlay toPlay={isToPlay} />
+                <PlayButton show={show} value={numbers} onclick={this.handleButton} disable={disable} /></div>
+            }
+        }
         
         return(
                 <div>
-                    <ToPlay toPlay={isToPlay}/>
-                    <PlayButton show={show} value={numbers} onclick={this.handleButton} disable={disable}/>
+                    {showBoard}
                 </div>
             
         )
