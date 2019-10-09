@@ -17,11 +17,14 @@ function Winner(props){
             <button onClick={props.onClick}>Replay Game</button>
         
         </div>
-        
-        
-            
-
     )
+}
+
+
+function reload() {
+    window.location.reload(setInterval(() => {
+
+    }, 1000))
 }
 
 
@@ -36,11 +39,12 @@ function ToPlay(props) {
     
 }
 
-function reload(){
-    window.location.reload(setInterval(() => {
-        
-    }, 1000))
+function Show(props) {
+    return (
+        <p>{props.stat}</p>
+    )
 }
+
 
 
 function checkXStatus(play_x){
@@ -77,11 +81,7 @@ function checkXStatus(play_x){
     }
 }
 
-function Show(props) {
-    return (
-        <p>{props.stat}</p>
-    )
-}
+
 
 function checkOStatus(play_o) {
     var new_play_o = play_o.filter(t => t != '');
