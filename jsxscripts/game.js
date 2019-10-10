@@ -136,6 +136,10 @@ class PlayButton extends React.Component{
             var showmarks=this.props.show;
             var val=this.props.value;
             var disable=this.props.disable;
+            var winner = this.props.winner;
+            if (winner) {
+                disable=[true,true,true,true,true,true,true,true,true];
+            }
 
             return (
                 <div>
@@ -155,6 +159,7 @@ class PlayButton extends React.Component{
         }
         
 }
+
 
 class XOGame extends React.Component{
 
@@ -233,14 +238,13 @@ class XOGame extends React.Component{
             whoWon = checkOStatus(player_o);
         }
         
+        
 
         return(
                 <div>
-
                     {whoWon}
                     <ToPlay toPlay={isToPlay} />
-                    <PlayButton show={show} value={numbers} onclick={this.handleButton} disable={disable} />
-
+                    <PlayButton show={show} value={numbers} onclick={this.handleButton} disable={disable} winner={whoWon}/>
                 </div>
         )
 

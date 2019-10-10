@@ -35,6 +35,10 @@ function Winner(props) {
     );
 }
 
+function reload() {
+    window.location.reload(setInterval(function () {}, 1000));
+}
+
 function ToPlay(props) {
 
     return React.createElement(
@@ -49,8 +53,12 @@ function ToPlay(props) {
     );
 }
 
-function reload() {
-    window.location.reload(setInterval(function () {}, 1000));
+function Show(props) {
+    return React.createElement(
+        'p',
+        null,
+        props.stat
+    );
 }
 
 function checkXStatus(play_x) {
@@ -86,14 +94,6 @@ function checkXStatus(play_x) {
     if (highest >= 3) {
         return React.createElement(Winner, { winner: 'X', onClick: reload });
     }
-}
-
-function Show(props) {
-    return React.createElement(
-        'p',
-        null,
-        props.stat
-    );
 }
 
 function checkOStatus(play_o) {
@@ -155,6 +155,10 @@ var PlayButton = function (_React$Component) {
             var showmarks = this.props.show;
             var val = this.props.value;
             var disable = this.props.disable;
+            var winner = this.props.winner;
+            if (winner) {
+                disable = [true, true, true, true, true, true, true, true, true];
+            }
 
             return React.createElement(
                 'div',
@@ -299,7 +303,7 @@ var XOGame = function (_React$Component2) {
                 null,
                 whoWon,
                 React.createElement(ToPlay, { toPlay: isToPlay }),
-                React.createElement(PlayButton, { show: show, value: numbers, onclick: this.handleButton, disable: disable })
+                React.createElement(PlayButton, { show: show, value: numbers, onclick: this.handleButton, disable: disable, winner: whoWon })
             );
         }
     }]);
