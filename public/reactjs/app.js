@@ -132,16 +132,68 @@ function checkOStatus(play_o) {
     }
 }
 
-var PlayButton = function (_React$Component) {
-    _inherits(PlayButton, _React$Component);
+var SelectPlayer = function (_React$Component) {
+    _inherits(SelectPlayer, _React$Component);
+
+    function SelectPlayer(props) {
+        _classCallCheck(this, SelectPlayer);
+
+        var _this = _possibleConstructorReturn(this, (SelectPlayer.__proto__ || Object.getPrototypeOf(SelectPlayer)).call(this, props));
+
+        _this.changePlayer = _this.changePlayer.bind(_this);
+        return _this;
+    }
+
+    _createClass(SelectPlayer, [{
+        key: 'changePlayer',
+        value: function changePlayer(event) {
+            this.props.onChange(event.target.value);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var firstPlayer = this.props.firstPlayer;
+            var disable_select = this.props.disable_select;
+
+            return React.createElement(
+                'div',
+                null,
+                React.createElement(
+                    'p',
+                    null,
+                    'Select First Player'
+                ),
+                React.createElement(
+                    'select',
+                    { value: firstPlayer, onChange: this.changePlayer, disabled: disable_select },
+                    React.createElement(
+                        'option',
+                        { value: 'x' },
+                        'X'
+                    ),
+                    React.createElement(
+                        'option',
+                        { value: 'o' },
+                        'O'
+                    )
+                )
+            );
+        }
+    }]);
+
+    return SelectPlayer;
+}(React.Component);
+
+var PlayButton = function (_React$Component2) {
+    _inherits(PlayButton, _React$Component2);
 
     function PlayButton(props) {
         _classCallCheck(this, PlayButton);
 
-        var _this = _possibleConstructorReturn(this, (PlayButton.__proto__ || Object.getPrototypeOf(PlayButton)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (PlayButton.__proto__ || Object.getPrototypeOf(PlayButton)).call(this, props));
 
-        _this.handlePlay = _this.handlePlay.bind(_this);
-        return _this;
+        _this2.handlePlay = _this2.handlePlay.bind(_this2);
+        return _this2;
     }
 
     _createClass(PlayButton, [{
@@ -215,15 +267,15 @@ var PlayButton = function (_React$Component) {
     return PlayButton;
 }(React.Component);
 
-var XOGame = function (_React$Component2) {
-    _inherits(XOGame, _React$Component2);
+var XOGame = function (_React$Component3) {
+    _inherits(XOGame, _React$Component3);
 
     function XOGame(props) {
         _classCallCheck(this, XOGame);
 
-        var _this2 = _possibleConstructorReturn(this, (XOGame.__proto__ || Object.getPrototypeOf(XOGame)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (XOGame.__proto__ || Object.getPrototypeOf(XOGame)).call(this, props));
 
-        _this2.state = {
+        _this3.state = {
             player_x: [],
             player_o: [],
             isToPlay: 'x',
@@ -231,17 +283,23 @@ var XOGame = function (_React$Component2) {
             played: '',
             restart: 1,
             show: [],
+            disable_select: false,
             disable: [false, false, false, false, false, false, false, false, false]
 
         };
 
-        _this2.handleButton = _this2.handleButton.bind(_this2);
-        _this2.resetGame = _this2.resetGame.bind(_this2);
+        _this3.handleButton = _this3.handleButton.bind(_this3);
+        _this3.resetGame = _this3.resetGame.bind(_this3);
 
-        return _this2;
+        return _this3;
     }
 
     _createClass(XOGame, [{
+        key: 'changeFirstPlayer',
+        value: function changeFirstPlayer(value) {
+            this.setState({ isToPlay: value });
+        }
+    }, {
         key: 'resetGame',
         value: function resetGame(resetVal) {
             this.setState({ restart: resetVal });
@@ -261,7 +319,7 @@ var XOGame = function (_React$Component2) {
                 disables[value] = true;
                 player_x_marks_in_num.push(value);
 
-                this.setState({ show: showMarks, player_x: player_x_marks_in_num, isToPlay: 'o', disable: disables, played: 'x' });
+                this.setState({ show: showMarks, player_x: player_x_marks_in_num, isToPlay: 'o', disable: disables, played: 'x', disable_select: true });
             }
             if (this.state.isToPlay == 'o') {
                 var showMarks = [];
@@ -272,7 +330,7 @@ var XOGame = function (_React$Component2) {
                 showMarks[value] = 'O';
                 disables[value] = true;
                 player_o_marks_in_num.push(value);
-                this.setState({ show: showMarks, player_o: player_o_marks_in_num, isToPlay: 'x', disable: disables, played: 'o' });
+                this.setState({ show: showMarks, player_o: player_o_marks_in_num, isToPlay: 'x', disable: disables, played: 'o', disable_select: true });
             }
         }
     }, {
@@ -287,6 +345,7 @@ var XOGame = function (_React$Component2) {
             var numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8];
             var show = this.state.show;
             var disable = this.state.disable;
+            var disable_select = this.state.disable_select;
 
             var whoWon;
             var showWinBoard;
@@ -303,7 +362,8 @@ var XOGame = function (_React$Component2) {
                 null,
                 whoWon,
                 React.createElement(ToPlay, { toPlay: isToPlay }),
-                React.createElement(PlayButton, { show: show, value: numbers, onclick: this.handleButton, disable: disable, winner: whoWon })
+                React.createElement(SelectPlayer, { firstPlayer: isToPlay, onChange: this.changeFirstPlayer.bind(this), disable_select: disable_select }),
+                React.createElement(PlayButton, { show: show, value: numbers, onclick: this.handleButton, disable: disable, winner: whoWon, disable_select: disable_select })
             );
         }
     }]);
