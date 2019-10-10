@@ -121,6 +121,33 @@ function checkOStatus(play_o) {
 
 }
 
+class SelectPlayer extends React.Component{
+    constructor(props){
+        super(props);
+        this.changePlayer=this.changePlayer.bind(this);
+    }
+
+    changePlayer(event){
+        this.props.onChange(event.target.value);
+    }
+
+        render(){
+            var firstPlayer=this.props.firstPlayer;
+            var disable_select=this.props.disable_select;
+
+            return(
+                <div>
+                    <p>Select First Player</p>
+                    <select value={firstPlayer} onChange={this.changePlayer} disabled={disable_select}>
+                        <option value="x">X</option>
+                        <option value="o">O</option>
+                    </select>
+                </div>
+
+            )
+        }
+    }
+
 class PlayButton extends React.Component{
         constructor(props){
             super(props);
@@ -174,6 +201,7 @@ class XOGame extends React.Component{
             played:'',
             restart:1,
             show:[],
+            disable_select:false,
             disable:[false,false,false,false,false,false,false,false,false]
             
         }
@@ -181,6 +209,10 @@ class XOGame extends React.Component{
         this.handleButton=this.handleButton.bind(this);
         this.resetGame=this.resetGame.bind(this);
         
+    }
+
+    changeFirstPlayer(value){
+        this.setState({isToPlay:value});
     }
 
     resetGame(resetVal){
@@ -202,7 +234,7 @@ class XOGame extends React.Component{
             player_x_marks_in_num.push(value);
             
 
-            this.setState({show:showMarks,player_x:player_x_marks_in_num,isToPlay:'o',disable:disables,played:'x'});
+            this.setState({show:showMarks,player_x:player_x_marks_in_num,isToPlay:'o',disable:disables,played:'x',disable_select:true});
         }
         if (this.state.isToPlay == 'o') {
             var showMarks = [];
@@ -213,7 +245,7 @@ class XOGame extends React.Component{
             showMarks[value] = 'O';
             disables[value] = true;
             player_o_marks_in_num.push(value);
-            this.setState({ show: showMarks, player_o: player_o_marks_in_num, isToPlay: 'x', disable:disables,played:'o'});
+            this.setState({ show: showMarks, player_o: player_o_marks_in_num, isToPlay: 'x', disable:disables,played:'o',disable_select:true});
         }
     }
 
@@ -227,6 +259,7 @@ class XOGame extends React.Component{
         const numbers=[0,1,2,3,4,5,6,7,8];
         var show=this.state.show;
         var disable=this.state.disable;
+        var disable_select=this.state.disable_select;
 
         var whoWon;
         var showWinBoard;
@@ -244,7 +277,8 @@ class XOGame extends React.Component{
                 <div>
                     {whoWon}
                     <ToPlay toPlay={isToPlay} />
-                    <PlayButton show={show} value={numbers} onclick={this.handleButton} disable={disable} winner={whoWon}/>
+                    <SelectPlayer firstPlayer={isToPlay} onChange={this.changeFirstPlayer.bind(this)} disable_select={disable_select}/>
+                    <PlayButton show={show} value={numbers} onclick={this.handleButton} disable={disable} winner={whoWon} disable_select={disable_select}/>
                 </div>
         )
 
